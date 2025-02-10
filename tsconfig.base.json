@@ -14,7 +14,9 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "styled-tw": ["libs/styled-tw/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

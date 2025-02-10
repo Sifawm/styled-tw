@@ -1,0 +1,9 @@
+{
+  "name": "styled-tw",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/styled-tw/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project styled-tw --web",
+  "targets": {}
+}
