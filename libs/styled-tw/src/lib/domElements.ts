@@ -92,4 +92,4 @@ export const domElements = [
   'ul',
   'var',
   'video',
-];
+] as const;

@@ -1,1 +1,1 @@
-export * from './lib/styled-tw';
+export * from './lib';

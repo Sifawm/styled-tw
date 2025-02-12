@@ -26,7 +26,7 @@ type MergeFunction = (classNames: string) => string;
 type ExternalProps<T> = { className?: string } & T;
 
 export type IntrisicElementsMap = {
-  [RTag in keyof JSX.IntrinsicElements]: <P extends object = any>(
+  [RTag in (typeof domElements)[number]]: <P extends object = any>(
     ...classNames: ClassNames<P>
   ) => React.ForwardRefExoticComponent<
     ExternalProps<P> & React.RefAttributes<unknown>
