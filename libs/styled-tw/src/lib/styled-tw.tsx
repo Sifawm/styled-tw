@@ -3,7 +3,7 @@ import React from 'react';
 import { cx } from './cx';
 import { domElements } from './domElements';
 
-export type ClassName = string | undefined;
+export type ClassName = string | false | undefined;
 
 export type ClassNameWithProps<Props extends object = any> = (
   props: Props
@@ -14,7 +14,7 @@ export type ClassNames<P extends object = any> = (
   | ClassNameWithProps<P>
 )[];
 
-export type Slot = { [key: string]: string | undefined };
+export type Slot = { [key: string]: string | false | undefined };
 
 export type SlotWithProps<Props extends object = any> = (props: Props) => Slot;
 
@@ -28,11 +28,15 @@ export type MergeFunction = (classNames: string) => string;
 
 export type ExternalProps<T> = { className?: string } & T;
 
-export type IntrisicElementsMap = {
-  [RTag in (typeof domElements)[number]]: <P extends object = any>(
-    ...classNames: ClassNames<P>
+export type IntrinsicElementsMap = {
+  [Tag in (typeof domElements)[number]]: <P extends object = any>(
+    ...classNames: StyledParams<P>
   ) => React.ForwardRefExoticComponent<
-    ExternalProps<P> & React.RefAttributes<unknown>
+    ExternalProps<P> &
+      React.RefAttributes<JSX.IntrinsicElements[Tag]> &
+      (Tag extends keyof JSX.IntrinsicElements
+        ? Omit<JSX.IntrinsicElements[Tag], keyof ExternalProps<P>>
+        : never)
   >;
 };
 
@@ -111,13 +115,13 @@ const styledFactory = (Element: any) => {
 
 export function create(
   mergeFunction?: MergeFunction
-): IntrisicElementsMap & typeof styledFactory {
-  const intrisicElementsMap: IntrisicElementsMap = domElements.reduce(
+): IntrinsicElementsMap & typeof styledFactory {
+  const intrisicElementsMap: IntrinsicElementsMap = domElements.reduce(
     (acc, DomElement: string) => ({
       ...acc,
       [DomElement]: styledFactory(DomElement),
     }),
-    {} as IntrisicElementsMap
+    {} as IntrinsicElementsMap
   );
 
   const styled = Object.assign(styledFactory, intrisicElementsMap);
