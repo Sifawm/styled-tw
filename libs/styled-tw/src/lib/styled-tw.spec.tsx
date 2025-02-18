@@ -45,6 +45,16 @@ describe('StyledTw', () => {
     expect(st.className).toBe('text-center uppercase');
   });
 
+  it('should accepts children', () => {
+    const Component = styled.div('text-center');
+
+    const { baseElement } = render(<Component>Children</Component>);
+
+    const st = baseElement.children[0].children[0];
+
+    expect(st.className).toBe('text-center');
+  });
+
   describe('extends styles', () => {
     const Base = ({ className }: { className?: string | { slot: string } }) => (
       <div
@@ -150,6 +160,16 @@ describe('StyledTw', () => {
       rerender(<Component $disabled />);
 
       expect(stActive.className).toBe('opacity-50 text-center uppercase');
+    });
+
+    it('should accepts children', () => {
+      const Component = styled.div<{ $disabled?: boolean }>('text-center');
+
+      const { baseElement } = render(<Component>Children</Component>);
+
+      const st = baseElement.children[0].children[0];
+
+      expect(st.className).toBe('text-center');
     });
   });
 });

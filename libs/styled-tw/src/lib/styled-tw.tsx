@@ -3,27 +3,30 @@ import React from 'react';
 import { cx } from './cx';
 import { domElements } from './domElements';
 
-type ClassName = string | undefined;
+export type ClassName = string | undefined;
 
-type ClassNameWithProps<Props extends object = any> = (
+export type ClassNameWithProps<Props extends object = any> = (
   props: Props
 ) => ClassName;
 
-type ClassNames<P extends object = any> = (ClassName | ClassNameWithProps<P>)[];
+export type ClassNames<P extends object = any> = (
+  | ClassName
+  | ClassNameWithProps<P>
+)[];
 
-type Slot = { [key: string]: string | undefined };
+export type Slot = { [key: string]: string | undefined };
 
-type SlotWithProps<Props extends object = any> = (props: Props) => Slot;
+export type SlotWithProps<Props extends object = any> = (props: Props) => Slot;
 
-type Slots<P extends object = any> = (Slot | SlotWithProps<P>)[];
+export type Slots<P extends object = any> = (Slot | SlotWithProps<P>)[];
 
-type StyledParams<P extends object = any> = ClassNames<P> | Slots<P>;
+export type StyledParams<P extends object = any> = ClassNames<P> | Slots<P>;
 
-type CleanedClassName = ClassNames[number] | Slots[number];
+export type CleanedClassName = ClassNames[number] | Slots[number];
 
-type MergeFunction = (classNames: string) => string;
+export type MergeFunction = (classNames: string) => string;
 
-type ExternalProps<T> = { className?: string } & T;
+export type ExternalProps<T> = { className?: string } & T;
 
 export type IntrisicElementsMap = {
   [RTag in (typeof domElements)[number]]: <P extends object = any>(
@@ -106,7 +109,9 @@ const styledFactory = (Element: any) => {
   };
 };
 
-export function create(mergeFunction?: MergeFunction) {
+export function create(
+  mergeFunction?: MergeFunction
+): IntrisicElementsMap & typeof styledFactory {
   const intrisicElementsMap: IntrisicElementsMap = domElements.reduce(
     (acc, DomElement: string) => ({
       ...acc,
