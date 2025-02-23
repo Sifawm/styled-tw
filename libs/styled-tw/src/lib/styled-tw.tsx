@@ -76,6 +76,10 @@ function cleanClassName(
   return mergeFunction?.(cleaned) ?? cleaned;
 }
 
+function removeTransientProps([key]: [string, any]) {
+  return key.charAt(0) !== '$';
+}
+
 const styledFactory = (Element: any) => {
   return <P extends object = any>(...classNames: StyledParams<P>) => {
     const ComponentWithTw = React.forwardRef<unknown, ExternalProps<P>>(
@@ -99,7 +103,13 @@ const styledFactory = (Element: any) => {
           );
         }
 
-        return <Element ref={ref} {...props} className={cleanedClassName} />;
+        const filteredProps = Object.fromEntries(
+          Object.entries(props).filter(removeTransientProps)
+        );
+
+        return (
+          <Element ref={ref} {...filteredProps} className={cleanedClassName} />
+        );
       }
     );
 
